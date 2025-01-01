@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Green Rice Store</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('image1.jpeg'); /* Replace with your image URL */
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+        .header {
+            background-image: url('image-2.jpg');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            height: 100vh;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .container {
+            position: absolute;
+            top: 10px;
+            left: 30%;
+            margin-top: 200px;
+            padding: 20px;
+            width: 600px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .product {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        .product input {
+            width: 50px;
+            padding: 5px;
+            text-align: center;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        .total {
+            font-weight: bold;
+            margin-top: 20px;
+            text-align: right;
+        }
+        .submit-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .submit-btn:hover {
+            background-color: #45a049;
+        }
+        .contact-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <b>
+            <h1>Mukundha Rice Store</h1>
+            <p>Order rice online and get it delivered to your doorstep!</p>
+        </b>
+    </div>
+
+    <div class="container">
+        <form id="orderForm">
+            <h2>Order Rice</h2>
+
+            <div class="product">
+                <label for="basmati">Basmati Rice (kg):</label>
+                <input type="number" id="basmati" name="basmati" min="0" value="0" onchange="calculateTotal()">
+                <span>Price: ₹50/kg</span>
+            </div>
+
+            <div class="product">
+                <label for="sonaMasuri">Sona Masuri Rice (kg):</label>
+                <input type="number" id="sonaMasuri" name="sonaMasuri" min="0" value="0" onchange="calculateTotal()">
+                <span>Price: ₹40/kg</span>
+            </div>
+
+            <div class="product">
+                <label for="brownRice">Brown Rice (kg):</label>
+                <input type="number" id="brownRice" name="brownRice" min="0" value="0" onchange="calculateTotal()">
+                <span>Price: ₹60/kg</span>
+            </div>
+
+            <div class="input-group">
+                <label for="address">Address:</label>
+                <textarea id="address" name="address" rows="3" style="width: 100%;" placeholder="Enter your delivery address"></textarea>
+            </div>
+
+            <div class="input-group">
+                <label for="phone">Phone Number:</label>
+                <input type="tel" id="phone" name="phone" style="width: 100%;" placeholder="Enter your phone number">
+            </div>
+
+            <div class="total" id="totalPrice">Total: ₹0</div>
+
+            <button type="button" class="submit-btn" onclick="sendToWhatsApp()">Submit Order</button>
+        </form>
+    </div>
+
+    <script>
+        function calculateTotal() {
+            const basmatiPrice = 50;
+            const sonaMasuriPrice = 40;
+            const brownRicePrice = 60;
+
+            const basmati = document.getElementById('basmati').value || 0;
+            const sonaMasuri = document.getElementById('sonaMasuri').value || 0;
+            const brownRice = document.getElementById('brownRice').value || 0;
+
+            const total = (basmati * basmatiPrice) + (sonaMasuri * sonaMasuriPrice) + (brownRice * brownRicePrice);
+
+            document.getElementById('totalPrice').textContent = `Total: ₹${total}`;
+            return total;
+        }
+
+        function sendToWhatsApp() {
+    const basmati = document.getElementById('basmati').value;
+    const sonaMasuri = document.getElementById('sonaMasuri').value;
+    const brownRice = document.getElementById('brownRice').value;
+    const address = document.getElementById('address').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const total = calculateTotal();
+
+    // Check if address and phone number are provided
+    if (!address || !phone) {
+        alert("Please enter your address and phone number.");
+        return;
+    }
+
+    // Construct the WhatsApp message
+    let message = `Welcome to Mukundha Rice Store\n`;
+    message += `Here are the order details:\n`;
+    if (basmati > 0) message += ` Basmati Rice: ${basmati} kg\n`;
+    if (sonaMasuri > 0) message += ` Sona Masuri Rice: ${sonaMasuri} kg\n`;
+    if (brownRice > 0) message += ` Brown Rice: ${brownRice} kg\n`;
+    message += `Total Price: ₹${total}\n`;
+    message += `Delivery Details:\n`;
+    message += ` Address: ${address}\n`;
+    message += ` Phone: ${phone}\n`;
+    message += `Thank you for your order!`;
+
+    // Replace with the store's WhatsApp number
+    const phoneNumber = '+919500752970';
+    const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+
+    // Open WhatsApp in a new tab
+    window.open(whatsappURL, '_blank');
+}
+
+    </script>
+</body>
+</html>
